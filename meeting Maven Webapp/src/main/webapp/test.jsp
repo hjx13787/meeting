@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="parent">
     <div class="children">
     	<div float:left;>
-    		<div style="float:left;width:50px;height:50px;"><img src="user.jpg" style="width:50px;height:50px;"></div>
+    		<div style="float:left;width:50px;height:50px;"><img src="国徽2.jpg" style="width:50px;height:50px;"></div>
     		<div style="float:left;color:yellow;font-size:22px;width:850px;height:50px;line-height:50px;text-align:center;">
     		<b id="meetingName"></b>
     		</div>
@@ -95,8 +95,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		</div>
     		<div style="float:left;width:33%;height:100%;">
     			<div style="float:left;height:50%;width:100%;margin-top:20px;"><img id="image" style="float:left;width:100%;height:100%;" src="user.jpg"></div>
-    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="user.jpg"></div>
-    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="user.jpg"></div>
+    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="广告1.jpg"></div>
+    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="广告2.jpg"></div>
     		</div>
     	</div>
     </div>
