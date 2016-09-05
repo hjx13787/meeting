@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="storeWebApp" version="2.5">
+	<display-name>MEETING</display-name>
+	<description>meeting</description>
+	<servlet>
+		<description>This is the description of my J2EE component</description>
+		<display-name>This is the display name of my J2EE component</display-name>
+		<servlet-name>MeetingServlet</servlet-name>
+		<servlet-class>com.donglu.meeting.MeetingServlet</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>MeetingServlet</servlet-name>
+		<url-pattern>/MeetingServlet</url-pattern>
+	</servlet-mapping>
+	<!-- 项目起始页面 -->
+	<welcome-file-list>
+		<welcome-file>/selectDevice.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
