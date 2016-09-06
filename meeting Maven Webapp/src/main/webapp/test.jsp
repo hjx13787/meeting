@@ -2,6 +2,8 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+request.setCharacterEncoding("UTF-8");
+response.setCharacterEncoding("UTF-8");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -9,14 +11,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>会议监控</title>
+    <title><%=new String(request.getParameter("name").getBytes("iso-8859-1"),"utf-8") %></title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	
+	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="themes/icon.css">
 	<script type="text/javascript" src="jquery.min.js"></script>
@@ -35,9 +37,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			contentType: "application/x-www-form-urlencoded",
 			url: "<%=path%>/MeetingServlet?method=getMember",  
 	        type: "POST",
-	        dataType: "json",  
+	        dataType: "json",
 	        success: function(data) {
-	            $("#meetingName").html(data.meetingName);
 				if(lastIdentifier == data.userIdentifire){
 					return;
 				}
@@ -49,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            $("#job").html(data.userJob);
 	            $("#identity").html(data.userIdentityType);
 	            $("#subGroup").html(data.userSubGroupType);
-
+	            
 				$("#image").attr('src',"<%=path%>/MeetingServlet?method=getUserImage&random="+Math.random());
 				lastIdentifier = data.userIdentifire;
 	        },
@@ -62,41 +63,56 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   <style>
 .parent{position:relative;background:red; margin:0 auto;}
-.children{position:absolute; width:900px; height:500px; left:50%; top:50%; margin-left:-450px;background:red;}
+.children{position:absolute; width:1000px; height:450px; left:50%; top:50%; margin-left:-500px;background:red;}
 </style>
 <body style="background:red;">
 <div class="parent">
     <div class="children">
-    	<div float:left;>
-    		<div style="float:left;width:50px;height:50px;"><img src="guohui2.jpg" style="width:50px;height:50px;"></div>
-    		<div style="float:left;color:yellow;font-size:22px;width:850px;height:50px;line-height:50px;text-align:center;">
-    		<b id="meetingName"></b>
+    	<div style="float:left;">
+    		<div style="float:left;width:140px;height:140px;"><img src="dang.jpg" style="width:140px;height:140px;"></div>
+    		<div style="float:left;color:yellow;font-size:42px;width:860px;height:150px;line-height:75px;text-align:center;">
+    		<%
+    		String title = new String(request.getParameter("name").getBytes("iso-8859-1"),"utf-8");
+    		String[] split = title.split("，");
+    		for(String t:split){
+    			out.print("<b id='meetingName' style='text-align:center;whdth:100%'>"+t+"</b><br/>");
+    		}
+    		%>
+    		
     		</div>
     	</div>
+    	<div style="float:left;height:3px;background:yellow;width:100%"></div>
     	<div style="float:left;width:100%;height:100%;">
-    		<div style="float:left;width:67%;height:100%;">
-    			<div style="float: left;text-align:left;width:100%;">
-    				<div style="text-align:left;float: left;font-size:18pt;margin-left:30px;line-height:100px;color:yellow;width:45%;">
+    		<div style="float:left;width:75%;height:100%;">
+    			<div style="float: left;text-align:left;width:100%;margin-top:50px;">
+    				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;width:45%;">
     					<li style="list-style-type:none;">姓名：<b id="name"></b></li>
 						<li style="list-style-type:none">编号：<b id="identifie"></b></li>
+    				</div>
+    				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
+    					<li style="list-style-type:none">职务：<b id="job"></b></li>
 						<li style="list-style-type:none">座次：<b id="seat"></b></li>
+    				</div>
+    			</div>
+    			<div style="float: left;text-align:left;width:100%;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
+    				<li style="list-style-type:none">单位：<b id="group"></b></li>
+    			</div>
+    			<div style="float: left;text-align:left;width:100%;">
+    				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;width:45%;">
 						<li style="list-style-type:none">出席：<b id="outer"></b></li>
     				</div>
-    				<div style="text-align:left;float: left;font-size:18pt;margin-left:10px;line-height:100px;color:yellow;">
-    					<li style="list-style-type:none">职务：<b id="job"></b></li>
-						<li style="list-style-type:none">单位：<b id="group"></b></li>
-						<li style="list-style-type:none"><br/><b id="seat"></b></li>
+    				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
 						<li style="list-style-type:none">身份：<b id="identity"></b></li>
     				</div>
     			</div>
-    			<div style="float: left;text-align:left;width:100%;font-size:18pt;margin-left:30px;line-height:100px;color:yellow;">
+    			<div style="float: left;text-align:left;width:100%;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
     				<li style="list-style-type:none">分团：<b id="subGroup"></b></li>
     			</div>
     		</div>
-    		<div style="float:left;width:33%;height:100%;">
-    			<div style="float:left;height:50%;width:100%;margin-top:20px;"><img id="image" style="float:left;width:100%;height:100%;" src="user.jpg"></div>
-    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="guanggao1.jpg"></div>
-    			<div style="float:left;height:25%;width:100%;"><img style="float:left;width:100%;height:100%;" src="guanggao2.jpg"></div>
+    		<div style="float:left;width:25%;height:100%;">
+    			<div style="float:left;height:60%;width:100%;margin-top:20px;border:2px solid #000;"><img id="image" style="float:left;width:100%;height:100%;" src="hu.jpg"></div>
+    			<div style="float:left;height:20%;width:100%;margin-top:5px;"><img style="float:left;width:100%;height:100%;" src="guanggao1.jpg"></div>
+    			<div style="float:left;height:20%;width:100%;margin-top:5px;"><img style="float:left;width:100%;height:100%;" src="guanggao2.jpg"></div>
     		</div>
     	</div>
     </div>

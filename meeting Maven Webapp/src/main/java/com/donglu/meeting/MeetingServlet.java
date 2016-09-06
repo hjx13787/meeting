@@ -2,8 +2,9 @@ package com.donglu.meeting;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -28,12 +29,12 @@ import com.dongluhitec.card.domain.db.meeting.Meeting;
 import com.dongluhitec.card.domain.db.meeting.MeetingMember;
 
 public class MeetingServlet extends HttpServlet {
+	private static final String MAP_MEETING = "mapMeeting";
 	String meetingSeverUrl="127.0.0.1";
 	private static MeetingMonitorService service;
 	private Long meetingId;
 	private String deviceIdentifie;
 	private MeetingMember member;
-	private static Map<Long,Meeting> mapMeeting=new HashMap<>();
 	@Override
 	public void init() throws ServletException {
 		try {
@@ -91,38 +92,38 @@ public class MeetingServlet extends HttpServlet {
 	}
 
 	private void setMeetingDevice(HttpServletRequest req, HttpServletResponse resp) {
-		String msg="";
-		Json j=new Json();
 		try {
-			Map<String, String[]> map = req.getParameterMap();
-			System.out.println(map);
-			
-			String id = req.getParameter("meetingName");
-			String deviceIdentifie = req.getParameter("device");
-			if (id==null||deviceIdentifie==null) {
-				throw new Exception("没有选择会议或设备");
-			}
-			meetingId = Long.valueOf(id);
-			this.deviceIdentifie=deviceIdentifie;
-			j.setSuccess(true);
+			req.setCharacterEncoding("UTF-8");
+			String id = req.getParameter("id");
+			String name = new String(req.getParameter("name").getBytes("iso-8859-1"),"utf-8");
+			String deviceIdentifier = req.getParameter("deviceIdentifier");
+
+			req.getSession().setAttribute("id", id);
+			req.getSession().setAttribute("name",name);
+			req.getSession().setAttribute("deviceIdentifier",deviceIdentifier);
+    		
+			String location = "test.jsp?name=" + URLEncoder.encode(name, "utf-8");
+			resp.sendRedirect(location );
 		} catch (Exception e) {
-			msg=e.getMessage();
+			e.printStackTrace();
 		}
-		j.setMsg(msg);
-		writeJson(j, req, resp);
 	}
 
 
 	private void getMember(HttpServletRequest req, HttpServletResponse resp) {
+		String parameter = (String)req.getSession().getAttribute("id");
+		if (parameter==null) {
+			return;
+		}
+		Long id=Long.valueOf(parameter);
+		String deviceIdentifier = (String)req.getSession().getAttribute("deviceIdentifier");
 		member = new MeetingMember();
 		member.setUserIdentifire("");
 		member.setUserName("");
 		member.setUserGroupCodeNameJoinStr("");
-		String meetingName = mapMeeting.get(meetingId)==null?"":mapMeeting.get(meetingId).getName();
-//		System.out.println("meetingName====="+meetingName);
-		member.setMeetingName(meetingName);
+		
 		try {
-			MeetingMember m = service.getLastEventMember(meetingId, deviceIdentifie);
+			MeetingMember m = service.getLastEventMember(id, deviceIdentifier);
 			if (m!=null) {
 				member=m;
 			}
@@ -131,7 +132,8 @@ public class MeetingServlet extends HttpServlet {
 			String substring = userGroupCodeNameJoinStr.substring(indexOf+1);
 			member.setUserGroupCodeNameJoinStr(substring);
 			member.setSeat(member.getSeat()==null?"":member.getSeat());
-//			System.out.println(member.getUserName());
+			String mName = (String)req.getSession().getAttribute("name");
+			member.setMeetingName(mName);
 		} catch (Exception e) {
 			
 		}
@@ -173,9 +175,11 @@ public class MeetingServlet extends HttpServlet {
 			c.set(Calendar.SECOND, 59);
 			Date parse2 = c.getTime();
 			List<Meeting> list = service.getMeetingByBetwenTime(parse, parse2);
+			Map<Long,Meeting> mapMeeting=new HashMap<>();
 			for (Meeting meeting : list) {
 				mapMeeting.put(meeting.getId(), meeting);
 			}
+			req.getSession().setAttribute(MAP_MEETING, mapMeeting);
 			writeJson(list, req, resp);
 		} catch (Exception e) {
 			e.printStackTrace();

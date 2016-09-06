@@ -2,6 +2,9 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+
+request.setCharacterEncoding("UTF-8");
+response.setCharacterEncoding("UTF-8");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -16,6 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="themes/icon.css">
 	<script type="text/javascript" src="jquery.min.js"></script>
@@ -89,7 +93,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}, 'json');
 		};
 		function submitFormWenchuan() {
-			var $form = $('#loginForm');//
+			var id = $('#meetingName').combobox('getValue');
+			var name = $('#meetingName').combobox('getText');
+			var deviceIdentifier = $('#device').combobox('getValue');
+			window.location.href = '<%=path%>/MeetingServlet?method=setMeetingDevice&id='+id + '&name='+ name + '&deviceIdentifier='+deviceIdentifier;
+			
+			/* $.messager.alert('提示', 'test.jsp?id='+id + '&name='+ name + '&deviceIdentifier='+deviceIdentifier, 'error', function() {
+						
+					}); */
+			
+			<%-- var $form = $('#loginForm');//
 			$('#loginBtn').linkbutton('disable');
 			$.post('<%=path%>/MeetingServlet?method=setMeetingDevice', $form.serialize(), function(result) {
 				if (result.success) {
@@ -99,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$('#loginBtn').linkbutton('enable');
 					});
 				}
-			}, 'json');
+			}, 'json'); --%>
 		};
 	</script>
   </head>

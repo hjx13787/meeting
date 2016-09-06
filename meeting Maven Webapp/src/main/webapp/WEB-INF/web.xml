@@ -12,7 +12,9 @@
 		<servlet-class>com.donglu.meeting.MeetingServlet</servlet-class>
 	</servlet>
 
-
+	<session-config>  
+		<session-timeout>14400</session-timeout>
+	</session-config>
 	<servlet-mapping>
 		<servlet-name>MeetingServlet</servlet-name>
 		<url-pattern>/MeetingServlet</url-pattern>
