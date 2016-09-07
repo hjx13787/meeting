@@ -74,21 +74,21 @@ public class MeetingServlet extends HttpServlet {
 	}
 
 	private void getUserImage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		if (member==null||member.getUserId()==null) {
-			return;
+		try {
+			if (member==null||member.getUserId()==null) {
+				return;
+			}
+			byte[] headerUserImage = service.getHeaderUserImage(member.getUserId());
+			if (headerUserImage==null||headerUserImage.length==0) {
+				headerUserImage = service.getHeaderUserImage(member.getUserId());
+			}
+			ServletOutputStream outputStream = resp.getOutputStream();
+			outputStream.write(headerUserImage);
+			outputStream.flush();
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		byte[] headerUserImage = service.getHeaderUserImage(member.getUserId());
-		System.out.println("headerUserImage.length=="+headerUserImage.length);
-		if (headerUserImage.length<1) {
-			URL resource = getClass().getClassLoader().getResource("user.png");
-			File file = new File(resource.getPath());
-			headerUserImage = Files.readAllBytes(Paths.get(file.getPath()));
-		}
-		ServletOutputStream outputStream = resp.getOutputStream();
-		outputStream.write(headerUserImage);
-		outputStream.flush();
-		outputStream.close();
 	}
 
 	private void setMeetingDevice(HttpServletRequest req, HttpServletResponse resp) {
@@ -121,6 +121,10 @@ public class MeetingServlet extends HttpServlet {
 		member.setUserIdentifire("");
 		member.setUserName("");
 		member.setUserGroupCodeNameJoinStr("");
+		member.setUserJob("");
+		member.setUserAttendType("");
+		member.setUserIdentityType("");
+		member.setUserSubGroupType("");
 		
 		try {
 			MeetingMember m = service.getLastEventMember(id, deviceIdentifier);

@@ -39,7 +39,7 @@ response.setCharacterEncoding("UTF-8");
 	        type: "POST",
 	        dataType: "json",
 	        success: function(data) {
-				if(lastIdentifier == data.userIdentifire){
+				if(lastIdentifier == data.userIdentifire||data.userIdentifire==""||data.userIdentifire==null){
 					return;
 				}
 	            $("#name").html(data.userName);  
@@ -65,7 +65,7 @@ response.setCharacterEncoding("UTF-8");
 .parent{position:relative;background:red; margin:0 auto;}
 .children{position:absolute; width:1000px; height:450px; left:50%; top:50%; margin-left:-500px;background:red;}
 </style>
-<body style="background:red;">
+<body style="background:red;font-family:FangSong_GB2312;">
 <div class="parent">
     <div class="children">
     	<div style="float:left;">
@@ -86,27 +86,27 @@ response.setCharacterEncoding("UTF-8");
     		<div style="float:left;width:75%;height:100%;">
     			<div style="float: left;text-align:left;width:100%;margin-top:50px;">
     				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;width:45%;">
-    					<li style="list-style-type:none;">姓名：<b id="name"></b></li>
-						<li style="list-style-type:none">编号：<b id="identifie"></b></li>
+    					<li style="list-style-type:none;"><b>姓名：</b><b id="name"></b></li>
+						<li style="list-style-type:none"><b>编号：</b><b id="identifie"></b></li>
     				</div>
     				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
-    					<li style="list-style-type:none">职务：<b id="job"></b></li>
-						<li style="list-style-type:none">座次：<b id="seat"></b></li>
+    					<li style="list-style-type:none"><b>职务：</b><b id="job"></b></li>
+						<li style="list-style-type:none"><b>座次：</b><b id="seat"></b></li>
     				</div>
     			</div>
     			<div style="float: left;text-align:left;width:100%;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
-    				<li style="list-style-type:none">单位：<b id="group"></b></li>
+    				<li style="list-style-type:none"><b>单位：</b><b id="group"></b></li>
     			</div>
     			<div style="float: left;text-align:left;width:100%;">
     				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;width:45%;">
-						<li style="list-style-type:none">出席：<b id="outer"></b></li>
+						<li style="list-style-type:none"><b>出席：</b><b id="outer"></b></li>
     				</div>
     				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
-						<li style="list-style-type:none">身份：<b id="identity"></b></li>
+						<li style="list-style-type:none"><b>身份：</b><b id="identity"></b></li>
     				</div>
     			</div>
     			<div style="float: left;text-align:left;width:100%;font-size:40;margin-left:0px;line-height:80px;color:yellow;">
-    				<li style="list-style-type:none">分团：<b id="subGroup"></b></li>
+    				<li style="list-style-type:none"><b>分团：</b><b id="subGroup"></b></li>
     			</div>
     		</div>
     		<div style="float:left;width:25%;height:100%;">
