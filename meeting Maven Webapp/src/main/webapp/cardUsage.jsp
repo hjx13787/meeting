@@ -101,9 +101,9 @@ String deviceIdentifier=request.getParameter("deviceIdentifier");
     		<div style="float:left;width:61%;height:100%;">
     			<div style="float: left;text-align:left;width:100%;margin-top:20px;">
     				<div style="text-align:left;float: left;font-size:40;margin-left:0px;line-height:80px;color:yellow;width:100%;">
-    					<li style="list-style-type:none;"><b id="nameLabel">用户姓名：</b><b id="name"></b></li>
+    					<li style="list-style-type:none;"><b id="nameLabel">访客姓名：</b><b id="name"></b></li>
 						<li style="list-style-type:none"><b id="idcardLabel">证 件 号：</b><b id="idcard"></b></li>
-						<li style="list-style-type:none"><b id="companyLabel">公司名称：</b><b id="company"></b></li>
+						<li style="list-style-type:none"><b id="companyLabel">访客单位：</b><b id="company"></b></li>
 						<li style="list-style-type:none"><b id="userNameLabel">被访人员：</b><b id="userName"></b></li>
 						<li style="list-style-type:none"><b id="userGroupLabel">被访部门：</b><b id="userGroup"></b></li>
 						<li style="list-style-type:none"><b id="reasonLabel">访问理由：</b><b id="reason"></b></li>
