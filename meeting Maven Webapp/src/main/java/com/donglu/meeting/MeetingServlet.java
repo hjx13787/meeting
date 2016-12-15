@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.caucho.hessian.client.HessianProxyFactory;
+import com.dongluhitec.card.blservice.CardUsageInfo;
 import com.dongluhitec.card.blservice.MeetingMonitorService;
 import com.dongluhitec.card.domain.db.Device;
 import com.dongluhitec.card.domain.db.meeting.Meeting;
@@ -69,18 +70,90 @@ public class MeetingServlet extends HttpServlet {
 		}else if(method.equals("setMeetingDevice")){
 			setMeetingDevice(req,resp);
 		}else if(method.equals("getUserImage")){
-			getUserImage(req,resp);
+			getUserImage(null,req,resp);
+		}else if(method.equals("getCardUsage")){
+			getCardUsage(req,resp);
+		}else if(method.equals("getCardUsageImage")){
+			getCardUsageImage(req,resp);
+		}else if(method.equals("getAllDevices")){
+			getAllDevices(req,resp);
+		}
+		
+	}
+	private void getAllDevices(HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			List<Device> list = service.findAllDevices();
+			writeJson(list, req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void getUserImage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	/**
+	 * 获取刷卡记录的图片
+	 * @param req
+	 * @param resp
+	 */
+	private void getCardUsageImage(HttpServletRequest req, HttpServletResponse resp) {
 		try {
-			if (member==null||member.getUserId()==null) {
-				return;
+			String imageName = req.getParameter("imageName");
+			if (imageName!=null) {
+				byte[] cardUsageImage = service.getCardUsageImage(imageName);
+				ServletOutputStream outputStream = resp.getOutputStream();
+				outputStream.write(cardUsageImage);
+				outputStream.flush();
+				outputStream.close();
+			}else{
+    			Long userId = (Long) req.getSession().getAttribute("userId");
+    			if (userId!=null) {
+    				getUserImage(userId, req, resp);
+    			}
 			}
-			byte[] headerUserImage = service.getHeaderUserImage(member.getUserId());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 获取最后的刷卡记录
+	 * @param req
+	 * @param resp
+	 */
+	private void getCardUsage(HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			String deviceIdentifier = req.getParameter("deviceIdentifier");
+			CardUsageInfo cardUsageInfo = service.findLastCardUsageInfo(deviceIdentifier);
+			if (cardUsageInfo==null) {
+				cardUsageInfo=new CardUsageInfo();
+			}else{
+				Long userId = cardUsageInfo.getUserId();
+				if (userId!=null) {
+					req.getSession().setAttribute("userId", userId);
+				}
+			}
+			writeJson(cardUsageInfo, req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * 获取用户头像
+	 * @param req
+	 * @param resp
+	 * @throws IOException
+	 */
+	private void getUserImage(Long userId,HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		try {
+			if (userId==null) {
+				if (member==null||member.getUserId()==null) {
+					return;
+				}
+				userId=member.getUserId();
+			}
+			byte[] headerUserImage = service.getHeaderUserImage(userId);
 			if (headerUserImage==null||headerUserImage.length==0) {
-				headerUserImage = service.getHeaderUserImage(member.getUserId());
+				headerUserImage = service.getHeaderUserImage(userId);
 			}
 			ServletOutputStream outputStream = resp.getOutputStream();
 			outputStream.write(headerUserImage);
@@ -90,7 +163,11 @@ public class MeetingServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * 获取会议设备
+	 * @param req
+	 * @param resp
+	 */
 	private void setMeetingDevice(HttpServletRequest req, HttpServletResponse resp) {
 		try {
 			req.setCharacterEncoding("UTF-8");
@@ -109,7 +186,11 @@ public class MeetingServlet extends HttpServlet {
 		}
 	}
 
-
+	/**
+	 * 获取最后刷卡的会议用户
+	 * @param req
+	 * @param resp
+	 */
 	private void getMember(HttpServletRequest req, HttpServletResponse resp) {
 		String parameter = (String)req.getSession().getAttribute("id");
 		if (parameter==null) {
@@ -143,7 +224,11 @@ public class MeetingServlet extends HttpServlet {
 		}
 		writeJson(member, req, resp);
 	}
-
+	/**
+	 * 查找会议下的设备
+	 * @param req
+	 * @param resp
+	 */
 	private void getDevices(HttpServletRequest req, HttpServletResponse resp) {
 		Json j=new Json();
 		try {
@@ -165,7 +250,11 @@ public class MeetingServlet extends HttpServlet {
 		}
 		writeJson(j, req, resp);
 	}
-
+	/**
+	 * 获取所有会议
+	 * @param req
+	 * @param resp
+	 */
 	private void getMeetings(HttpServletRequest req, HttpServletResponse resp) {
 		try {
 			Calendar c=Calendar.getInstance();

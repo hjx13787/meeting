@@ -56,6 +56,14 @@ response.setCharacterEncoding("UTF-8");
 			            }); 	
 			         }
 				});
+			  $('#allDevice').combobox({ 
+		          url:'<%=path%>/MeetingServlet?method=getAllDevices', 
+		          editable:false, //不可编辑状态
+		          cache: false,
+		          panelHeight: '150',
+		          valueField:'identifier',   
+			      textField:'name'
+				});
 			  $('#device').combobox({ 
 			      //url:'itemManage!categorytbl', 
 			      editable:false, //不可编辑状态
@@ -114,11 +122,15 @@ response.setCharacterEncoding("UTF-8");
 				}
 			}, 'json'); --%>
 		};
+		function submitFormMonitor() {
+			var deviceIdentifier = $('#allDevice').combobox('getValue');
+			window.location.href = '<%=path%>/cardUsage.jsp?deviceIdentifier='+deviceIdentifier;
+		};
 	</script>
   </head>
   
   <body>
-  		
+  		<div>
   		<form id="loginForm" method="post">
        <span>会议：</span>
        <input class="easyui-combobox"  style="width:200px;" name="meetingName"  id="meetingName">
@@ -126,7 +138,13 @@ response.setCharacterEncoding("UTF-8");
        <input class="easyui-combobox"  style="width:200px;" name="device" id="device">
        <a href="javascript:void(0)" id="loginBtn" class="easyui-linkbutton" onclick="submitFormNoImage()">监控无图片</a>
        <a href="javascript:void(0)" id="loginBtn" class="easyui-linkbutton" onclick="submitForm()">监控有图片</a>
-       <a href="javascript:void(0)" id="loginBtn" class="easyui-linkbutton" onclick="submitFormWenchuan()">汶川县会议</a>
+       <a href="javascript:void(0)" id="loginBtn" class="easyui-linkbutton" onclick="submitFormWenchuan()">会议监控</a>
        </form>
+       </div>
+       <div> 
+       <span>所有设备：</span>
+       <input class="easyui-combobox"  style="width:200px;" name="allDevice"  id="allDevice">
+       <a href="javascript:void(0)" id="loginBtn" class="easyui-linkbutton" onclick="submitFormMonitor()">安康刷卡监控</a>
+       </div>
   </body>
 </html>

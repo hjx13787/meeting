@@ -12,4 +12,8 @@ public interface MeetingMonitorService {
 	List<Device> getDeviceByMeeting(Long meetingId);
 	MeetingMember getLastEventMember(Long meetingId,String deviceIdentifie);
 	byte[] getHeaderUserImage(Long userId);
+	
+	CardUsageInfo findLastCardUsageInfo(String deviceIdentifier);
+	byte[] getCardUsageImage(String imageName);
+	List<Device> findAllDevices();
 }
